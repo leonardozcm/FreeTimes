@@ -1,9 +1,9 @@
 package com.example.com.freetimes;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +70,7 @@ public static TabLayoutFragment newInstance(String param1,String param2){
 private void initView(){
     initDays();
     RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
-    GridLayoutManager layoutManager=new GridLayoutManager(getActivity(),1);
+    LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
     recyclerView.setLayoutManager(layoutManager);
     daysAdapter=new DaysAdapter(daysList);
     recyclerView.setAdapter(daysAdapter);

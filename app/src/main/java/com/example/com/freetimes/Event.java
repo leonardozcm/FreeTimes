@@ -10,14 +10,14 @@ public class Event {
     public String thing;//事件内容
     public String posi;//事件地点
 
-   //开始时间
+
+    //开始时间
     public int happen_hour;
     public int happen_minus;
 
  /*
  为了快速输入定义了三种构造函数
   */
-
     public Event(String thing,int happen_hour){
         this.thing=thing;
         this.happen_hour=happen_hour;
@@ -52,5 +52,24 @@ public class Event {
     }
     public void setThing(String thing) {
         this.thing = thing;
+    }
+
+/*
+设置外界接口
+ */
+    public String getThing() {
+        return thing;
+    }
+
+    public String getPosi() {
+        return posi;
+    }
+
+    public int getHappen_hour() {
+        return happen_hour;
+    }
+
+    public int getHappen_minus() {
+        return happen_minus;
     }
 }

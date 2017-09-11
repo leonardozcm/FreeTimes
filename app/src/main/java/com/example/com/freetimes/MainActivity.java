@@ -16,7 +16,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.com.freetimes.R.id.viewpagerTab;
 import static com.example.com.freetimes.R.menu.toolbar;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
@@ -49,7 +48,7 @@ private DrawerLayout mDrawerLayout;
         }
 
         /*
-        加载日期视图
+        加载日期/事件视图
          */
         initView();
         initData();
@@ -57,23 +56,27 @@ private DrawerLayout mDrawerLayout;
 
     private void initView(){
         layoutTab = (TabLayout) findViewById(R.id.layoutTab);
-        viewPagerTab = (ViewPager) findViewById(viewpagerTab);
+        viewPagerTab = (ViewPager) findViewById(R.id.viewpagerTab);
         fragmentList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+
             TabLayoutFragment tabLayoutFragment = new TabLayoutFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("flag", String.valueOf(i));
+            bundle.putString("flag", String.valueOf(0));
             tabLayoutFragment.setArguments(bundle);
             fragmentList.add(tabLayoutFragment);
-        }
+
+        TabLayoutFragment2 tabLayoutFragment2 = new TabLayoutFragment2();
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("flag", String.valueOf(1));
+        tabLayoutFragment2.setArguments(bundle2);
+        fragmentList.add(tabLayoutFragment2);
+
     }
     private void initData() {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),Tablist,fragmentList);
         viewPagerTab.setAdapter(viewPagerAdapter);
         viewPagerTab.setOffscreenPageLimit(3);
         viewPagerTab.addOnPageChangeListener(this);
-//        代码中优先级高于xml
-//        layoutTab.setTabMode(TabLayout.MODE_SCROLLABLE);
         layoutTab.setupWithViewPager(viewPagerTab);
         layoutTab.setTabsFromPagerAdapter(viewPagerAdapter);
     }
