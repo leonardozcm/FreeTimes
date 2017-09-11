@@ -1,6 +1,7 @@
 package com.example.com.freetimes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,7 +43,15 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
             mContext=parent.getContext();
         }
         View view= LayoutInflater.from(mContext).inflate(R.layout.days_item,parent,false);
-        return new ViewHolder(view);
+        final ViewHolder holder=new ViewHolder(view);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(v.getContext(),DaysActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+        return holder;
     }
 
     @Override

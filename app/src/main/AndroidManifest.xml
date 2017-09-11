@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DaysActivity">
+            <intent-filter>
+                <action android:name="com.example.activitytest.DAYS_START"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DAYS_START"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import static com.example.com.freetimes.R.menu.toolbar;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
 private DrawerLayout mDrawerLayout;
     private TabLayout layoutTab;
     private ViewPager viewPagerTab;
@@ -80,11 +79,16 @@ private DrawerLayout mDrawerLayout;
         layoutTab.setupWithViewPager(viewPagerTab);
         layoutTab.setTabsFromPagerAdapter(viewPagerAdapter);
     }
+    /*
+    生成菜单
+     */
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(toolbar,menu);
         return true;
     }
-
+/*
+菜单选择
+ */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -102,6 +106,10 @@ private DrawerLayout mDrawerLayout;
         }
         return true;
     }
+
+    /*
+    划页重写三接口函数
+     */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
