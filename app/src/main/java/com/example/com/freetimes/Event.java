@@ -7,14 +7,17 @@ package com.example.com.freetimes;
 public class Event {
 
 
-    public String thing;//事件内容
-    public String posi;//事件地点
+    private String thing;//事件内容
 
 
     //开始时间
-    public int happen_hour;
-    public int happen_minus;
+    private int happen_hour;
+    private int happen_minus;
 
+
+    //结束时间
+    private int end_hour;
+    private int end_minus;
  /*
  为了快速输入定义了三种构造函数
   */
@@ -28,20 +31,16 @@ public class Event {
         this.happen_hour=happen_hour;
         this.happen_minus=happen_minus;
     }
-
-    public Event(String thing,int happen_hour,int happen_minus,String posi){
+    public Event(String thing,int happen_hour,int happen_minus,int end_hour,int end_minus){
         this.thing=thing;
         this.happen_hour=happen_hour;
         this.happen_minus=happen_minus;
-        this.posi=posi;
+        this.end_hour=end_hour;
+        this.end_minus=end_minus;
     }
-
 /*
 设置事件内容
  */
-    public void setPosi(String posi) {
-        this.posi = posi;
-    }
 
     public void setHappen_hour(int happen_hour) {
         this.happen_hour = happen_hour;
@@ -54,15 +53,18 @@ public class Event {
         this.thing = thing;
     }
 
-/*
-设置外界接口
+    public void setEnd_hour(int end_hour) {
+        this.end_hour = end_hour;
+    }
+    public void setEnd_minus(int end_minus) {
+        this.end_minus = end_minus;
+    }
+
+    /*
+读取数据
  */
     public String getThing() {
         return thing;
-    }
-
-    public String getPosi() {
-        return posi;
     }
 
     public int getHappen_hour() {
@@ -72,4 +74,14 @@ public class Event {
     public int getHappen_minus() {
         return happen_minus;
     }
+
+    public int getEnd_hour() {
+        return end_hour;
+    }
+
+
+    public int getEnd_minus() {
+        return end_minus;
+    }
+
 }

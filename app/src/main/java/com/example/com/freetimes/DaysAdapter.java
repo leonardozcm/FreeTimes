@@ -47,7 +47,9 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int date=holder.getAdapterPosition();
                 Intent intent=new Intent(v.getContext(),DaysActivity.class);
+                intent.putExtra("date",date);
                 v.getContext().startActivity(intent);
             }
         });

@@ -42,4 +42,5 @@ public class Day {
     public List<Event> getEvents(){
         return events;
     }
+
 }

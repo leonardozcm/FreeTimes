@@ -1,6 +1,5 @@
 package com.example.com.freetimes;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import java.util.List;
  */
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>  {
-    private Context mContext;
 
     private List<Event> mEventsList;
     static class ViewHolder extends RecyclerView.ViewHolder{

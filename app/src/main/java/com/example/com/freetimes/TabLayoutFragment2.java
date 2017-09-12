@@ -27,13 +27,9 @@ public class TabLayoutFragment2 extends Fragment {
 
     private View view;
 
-    private RecyclerView.LayoutManager layoutManager;
 
     private EventsAdapter eventsAdapter;
-    private List<String> stringList;
     private List<Event> eventsList=new ArrayList<>();
-
-    private RecyclerView recyclerView;
 
     public TabLayoutFragment2() {
         //Required empty public constructor
