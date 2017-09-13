@@ -11,19 +11,27 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.com.freetimes.Util.ItemDecoration;
 
+import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class DaysActivity extends BaseActivity {
 private DrawerLayout mDrawerLayout;
-    private ArrayList<Event> eventsList=new ArrayList<>();
+    private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
+    private int data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_days);
+
+        LitePal.getDatabase();
 
         Toolbar toolbar=(Toolbar)findViewById(R.id.days_toolbar);
         setSupportActionBar(toolbar);
@@ -38,8 +46,10 @@ private DrawerLayout mDrawerLayout;
 设置标题
  */
         Intent intent=getIntent();
-        int date=intent.getIntExtra("date",1)+1;
-         actionBar.setTitle("9月"+date+"日");
+        data=intent.getIntExtra("date",1)+1;
+        if(actionBar!=null) {
+            actionBar.setTitle("9月" + data + "日");
+        }
         /*
         加载事件视图
          */
@@ -48,14 +58,15 @@ private DrawerLayout mDrawerLayout;
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new ItemDecoration()) ;
-        dayseventadapter=new Dayseventadapter();
+        dayseventadapter=new Dayseventadapter(eventsList);
         recyclerView.setAdapter(dayseventadapter);
-        dayseventadapter.addDatas(eventsList);
         setHeadView(recyclerView);
 
 /*
 启动数据库
  */
+        //LitePal.getDatabase();
+
     }
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.days_toolbar,menu);
@@ -68,8 +79,29 @@ private DrawerLayout mDrawerLayout;
             case R.id.select_all:
                 break;
             case R.id.delete:
+                dayseventadapter.notifyItemRemoved(3);
+                eventsList.remove(2);
+                Toast.makeText(DaysActivity.this,"Delete succeed",Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.choose:
+            case R.id.choose:/*Test：添加数据库*/
+                for(int n=0;n<15;n++){
+                    Event event=new Event();
+                    switch (n%5){
+                        case 0:  event=new Event("起床",data,6,30,7,00);
+                            break;
+                        case 1:  event=new Event("早饭",data,7,00,7,30);
+                            break;
+                        case 2:  event=new Event("上午课",data,8,00,9,30);
+                            break;
+                        case 3:  event=new Event("下午课",data,13,30,14,30);
+                            break;
+                        case 4:  event=new Event("睡觉",data,22,00,24,00);
+                            break;
+                        default:break;
+                    }
+                    event.save();
+                }
+                Toast.makeText(DaysActivity.this,"Creat succeed",Toast.LENGTH_SHORT).show();
                 break;
             case android.R.id.home:
                 DaysActivity.this.finish();break;
@@ -79,22 +111,7 @@ private DrawerLayout mDrawerLayout;
     }
 
     private void initEvents(){
-        for(int n=0;n<30;n++){
-            int day=0;
-            switch (n%5){
-                case 0: Event event0=new Event("起床",day+1,6,30,7,00);
-                    eventsList.add(event0);break;
-                case 1: Event event1=new Event("早饭",day+1,7,00,7,30);
-                    eventsList.add(event1);break;
-                case 2: Event event2=new Event("上午课",day+1,8,00,9,30);
-                    eventsList.add(event2);break;
-                case 3: Event event3=new Event("下午课",day+1,13,30,14,30);
-                    eventsList.add(event3);break;
-                case 4: Event event4=new Event("睡觉",day+1,22,00,24,00);
-                    eventsList.add(event4);break;
-                default:break;
-            }
-        }
+        eventsList= DataSupport.where("day=?",Integer.toString(data)).find(Event.class);
     }
 
     /*

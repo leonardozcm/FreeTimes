@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 59771 on 2017/9/12.
@@ -16,7 +17,7 @@ public class Dayseventadapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static final int TYPE_HEADER=0;
     public static final int TYPE_NORMAL=1;
     private View mHeaderView;//不妥的做法，但是暂时没有好的实现方法
-    private ArrayList<Event> eventsList=new ArrayList<>();
+    private List<Event> eventsList=new ArrayList<>();
 
 
     public View getHeaderView(){
@@ -27,7 +28,9 @@ public class Dayseventadapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyItemInserted(0);
     }
 
-
+public Dayseventadapter(List<Event> EventList){
+    eventsList=EventList;
+}
   class ViewHolder extends RecyclerView.ViewHolder{
         TextView events_name;
         TextView start_time;

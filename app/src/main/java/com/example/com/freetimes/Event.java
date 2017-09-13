@@ -23,6 +23,8 @@ public class Event extends DataSupport{
  /*
  为了快速输入定义了三种构造函数
   */
+ public Event(){}
+
     public Event(String thing,int day,int happen_hour){
         this.thing=thing;
         this.day=day;
