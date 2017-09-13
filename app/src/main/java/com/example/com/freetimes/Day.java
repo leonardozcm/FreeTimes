@@ -1,8 +1,5 @@
 package com.example.com.freetimes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by 59771 on 2017/9/8.
  */
@@ -12,7 +9,7 @@ public class Day {
 
     private int imageId;
 
-    public List<Event> events=new ArrayList<Event>();
+   // public List<Event> events=new ArrayList<Event>();
 
     public Day(int date,int imageId){
         this.date=date;
@@ -27,7 +24,7 @@ public class Day {
         return imageId;
     }
 
-    public void addEvent(Event event){
+  /*  public void addEvent(Event event){
         events.add(event);
     }
 
@@ -41,6 +38,6 @@ public class Day {
 
     public List<Event> getEvents(){
         return events;
-    }
+    }*/
 
 }

@@ -73,20 +73,31 @@ public class TabLayoutFragment2 extends Fragment {
      */
     private void initEvents(){
         for(int n=0;n<30;n++){
-            switch (n%5){
-                case 0: Event event0=new Event("起床",6);
-                    eventsList.add(event0);break;
-                case 1: Event event1=new Event("早饭",7);
-                    eventsList.add(event1);break;
-                case 2: Event event2=new Event("上午课",8);
-                    eventsList.add(event2);break;
-                case 3: Event event3=new Event("下午课",13);
-                    eventsList.add(event3);break;
-                case 4: Event event4=new Event("睡觉",22);
-                    eventsList.add(event4);break;
-                default:break;
+            int day=0;
+            switch (n%5) {
+                case 0:
+                    Event event0 = new Event("起床", day + 1, 6, 30, 7, 00);
+                    eventsList.add(event0);
+                    break;
+                case 1:
+                    Event event1 = new Event("早饭", day + 1, 7, 00, 7, 30);
+                    eventsList.add(event1);
+                    break;
+                case 2:
+                    Event event2 = new Event("上午课", day + 1, 8, 00, 9, 30);
+                    eventsList.add(event2);
+                    break;
+                case 3:
+                    Event event3 = new Event("下午课", day + 1, 13, 30, 14, 30);
+                    eventsList.add(event3);
+                    break;
+                case 4:
+                    Event event4 = new Event("睡觉", day + 1, 22, 00, 24, 00);
+                    eventsList.add(event4);
+                    break;
+                default:
+                    break;
             }
-
         }
     }
 }
