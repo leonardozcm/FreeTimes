@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,11 +36,13 @@ public Dayseventadapter(List<Event> EventList){
         TextView events_name;
         TextView start_time;
         TextView end_time;
+      LinearLayout layout;
         public ViewHolder(View view){
             super(view);
             if(view==mHeaderView){
                 return;
             }
+            layout=(LinearLayout)view.findViewById(R.id.days_event_layout) ;
             events_name=(TextView)view.findViewById(R.id.events_name);
             start_time=(TextView)view.findViewById(R.id.start_time);
             end_time=(TextView)view.findViewById(R.id.end_time);
@@ -63,7 +66,15 @@ public Dayseventadapter(List<Event> EventList){
                 Event event=eventsList.get(position-1);
                 ((ViewHolder)viewholder).events_name.setText(event.getThing());
                 ((ViewHolder)viewholder).start_time.setText("Starts at:"+event.getHappen_hour()+":"+event.getHappen_minus());
-                ((ViewHolder)viewholder).end_time.setText("Ends at"+event.getEnd_hour()+":"+event.getEnd_minus());
+                ((ViewHolder)viewholder).end_time.setText("Ends   at:"+event.getEnd_hour()+":"+event.getEnd_minus());
+                switch ((position-1)%5){
+                    case 0: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue1);break;
+                    case 1: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue2);break;
+                    case 2: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue3);break;
+                    case 3: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue4);break;
+                    case 4: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue5);break;
+                    default:break;
+                }
             }
 
     }

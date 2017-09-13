@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.com.freetimes.Util.ItemDecoration;
-
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
@@ -57,7 +55,6 @@ private DrawerLayout mDrawerLayout;
         RecyclerView recyclerView=(RecyclerView)findViewById(R.id.event_recyclerview);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new ItemDecoration()) ;
         dayseventadapter=new Dayseventadapter(eventsList);
         recyclerView.setAdapter(dayseventadapter);
         setHeadView(recyclerView);
