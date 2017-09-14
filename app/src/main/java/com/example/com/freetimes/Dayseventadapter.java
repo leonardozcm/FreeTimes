@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,7 +68,7 @@ public Dayseventadapter(List<Event> EventList){
                 ((ViewHolder)viewholder).events_name.setText(event.getThing());
                 ((ViewHolder)viewholder).start_time.setText("Starts at:"+event.getHappen_hour()+":"+event.getHappen_minus());
                 ((ViewHolder)viewholder).end_time.setText("Ends   at:"+event.getEnd_hour()+":"+event.getEnd_minus());
-                switch ((position-1)%5){
+                switch ((int)(Math.random()*5)){
                     case 0: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue1);break;
                     case 1: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue2);break;
                     case 2: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue3);break;
@@ -102,9 +103,15 @@ public Dayseventadapter(List<Event> EventList){
             return TYPE_HEADER;
         return TYPE_NORMAL;
     }
-
-    public void addDatas(ArrayList<Event> datas) {
-        eventsList.addAll(datas);
-        notifyDataSetChanged();
+    /*
+用于拖动与滑动的方法
+ */
+    public void onItemDismiss(int position){
+eventsList.remove(position-1);
+        notifyItemRemoved(position);
+    }
+    public void onItemMove(int from,int to){
+        Collections.swap(eventsList,from,to);//交换静态方法
+        notifyItemMoved(from,to);
     }
 }

@@ -5,11 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by 59771 on 2017/9/11.
- * 设置分隔栏
+ * Created by 59771 on 2017/9/14.
  */
 
-public class ItemDecoration extends RecyclerView.ItemDecoration {
+public class NewItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.set(0,0,0,1);

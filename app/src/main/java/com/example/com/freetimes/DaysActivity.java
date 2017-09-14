@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.com.freetimes.Util.NewItemDecoration;
+
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
@@ -55,6 +57,7 @@ private DrawerLayout mDrawerLayout;
         RecyclerView recyclerView=(RecyclerView)findViewById(R.id.event_recyclerview);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(new NewItemDecoration());
         dayseventadapter=new Dayseventadapter(eventsList);
         recyclerView.setAdapter(dayseventadapter);
         setHeadView(recyclerView);
@@ -74,9 +77,13 @@ private DrawerLayout mDrawerLayout;
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.select_all:
+                DataSupport.deleteAll(Event.class,"day = ?",Integer.toString(data));
                 break;
             case R.id.delete:
                 dayseventadapter.notifyItemRemoved(3);
+                int hours=eventsList.get(2).getHappen_hour();
+                int minus=eventsList.get(2).getHappen_minus();
+                DataSupport.deleteAll(Event.class,"day=? and happen_hour=? and happen_minus=?",Integer.toString(data),Integer.toString(hours),Integer.toString(minus));
                 eventsList.remove(2);
                 Toast.makeText(DaysActivity.this,"Delete succeed",Toast.LENGTH_SHORT).show();
                 break;
@@ -118,4 +125,5 @@ private DrawerLayout mDrawerLayout;
         View header = LayoutInflater.from(this).inflate(R.layout.days_header, view, false);
        dayseventadapter .setHeaderView(header);
     }
+
 }

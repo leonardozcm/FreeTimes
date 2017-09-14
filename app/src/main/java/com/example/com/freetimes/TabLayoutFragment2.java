@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.com.freetimes.Util.ItemDecoration;
+import com.example.com.freetimes.Util.NewItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class TabLayoutFragment2 extends Fragment {
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view2);
         LinearLayoutManager layoutManager=new  LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new ItemDecoration()) ;
+        recyclerView.addItemDecoration(new NewItemDecoration()) ;
         eventsAdapter=new EventsAdapter(eventsList);
         recyclerView.setAdapter(eventsAdapter);
         return view;
