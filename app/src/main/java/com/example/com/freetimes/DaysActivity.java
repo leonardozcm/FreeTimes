@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,10 +64,11 @@ private DrawerLayout mDrawerLayout;
         setHeadView(recyclerView);
 
 /*
-启动数据库
+设置Helper
  */
-        //LitePal.getDatabase();
-
+        ItemTouchHelper.Callback callback=new DayItemTouchHelperCallback(dayseventadapter);
+        ItemTouchHelper touchHelper=new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.days_toolbar,menu);
@@ -76,19 +78,22 @@ private DrawerLayout mDrawerLayout;
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.select_all:
-                DataSupport.deleteAll(Event.class,"day = ?",Integer.toString(data));
+            case R.id.delete_all:;
+                DataSupport.deleteAll(Event.class,"day=? ",Integer.toString(data));
+                dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
+                eventsList.clear();
                 break;
-            case R.id.delete:
-                dayseventadapter.notifyItemRemoved(3);
+            case R.id.add:
+               /* dayseventadapter.notifyItemRemoved(3);
                 int hours=eventsList.get(2).getHappen_hour();
                 int minus=eventsList.get(2).getHappen_minus();
                 DataSupport.deleteAll(Event.class,"day=? and happen_hour=? and happen_minus=?",Integer.toString(data),Integer.toString(hours),Integer.toString(minus));
                 eventsList.remove(2);
-                Toast.makeText(DaysActivity.this,"Delete succeed",Toast.LENGTH_SHORT).show();
+                dayseventadapter.notifyItemRangeRemoved();
+                Toast.makeText(DaysActivity.this,"Delete succeed",Toast.LENGTH_SHORT).show();*/
                 break;
             case R.id.choose:/*Test：添加数据库*/
-                for(int n=0;n<15;n++){
+                for(int n=0;n<5;n++){
                     Event event=new Event();
                     switch (n%5){
                         case 0:  event=new Event("起床",data,6,30,7,00);

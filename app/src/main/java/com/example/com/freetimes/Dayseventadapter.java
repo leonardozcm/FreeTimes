@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -104,14 +105,17 @@ public Dayseventadapter(List<Event> EventList){
         return TYPE_NORMAL;
     }
     /*
-用于拖动与滑动的方法
+用于滑动的方法
  */
     public void onItemDismiss(int position){
-eventsList.remove(position-1);
+        int day=eventsList.get(position-1).getDay();
+        int hours=eventsList.get(position-1).getHappen_hour();
+        int minus=eventsList.get(position-1).getHappen_minus();
+        String thing=eventsList.get(position-1).getThing();
+        DataSupport.deleteAll(Event.class,"day=? and thing=? and happen_hour=? and happen_minus=?",Integer.toString(day),thing,Integer.toString(hours),Integer.toString(minus));
+       eventsList.remove(position-1);
         notifyItemRemoved(position);
+
     }
-    public void onItemMove(int from,int to){
-        Collections.swap(eventsList,from,to);//交换静态方法
-        notifyItemMoved(from,to);
-    }
+
 }
