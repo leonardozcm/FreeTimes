@@ -47,7 +47,6 @@ public Dayseventadapter(List<Event> EventList){
             layout=(LinearLayout)view.findViewById(R.id.days_event_layout) ;
             events_name=(TextView)view.findViewById(R.id.events_name);
             start_time=(TextView)view.findViewById(R.id.start_time);
-            end_time=(TextView)view.findViewById(R.id.end_time);
         }
     }
 
@@ -68,7 +67,6 @@ public Dayseventadapter(List<Event> EventList){
                 Event event=eventsList.get(position-1);
                 ((ViewHolder)viewholder).events_name.setText(event.getThing());
                 ((ViewHolder)viewholder).start_time.setText("Starts at:"+event.getHappen_hour()+":"+event.getHappen_minus());
-                ((ViewHolder)viewholder).end_time.setText("Ends   at:"+event.getEnd_hour()+":"+event.getEnd_minus());
                 switch ((int)(Math.random()*5)){
                     case 0: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue1);break;
                     case 1: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue2);break;

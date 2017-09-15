@@ -22,7 +22,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaysActivity extends BaseActivity {
+public class DaysActivity extends BaseActivity implements View.OnClickListener{
 private DrawerLayout mDrawerLayout;
     private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
@@ -78,7 +78,7 @@ private DrawerLayout mDrawerLayout;
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.delete_all:;
+            case R.id.delete_all:
                 DataSupport.deleteAll(Event.class,"day=? ",Integer.toString(data));
                 dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
                 eventsList.clear();
@@ -96,15 +96,15 @@ private DrawerLayout mDrawerLayout;
                 for(int n=0;n<5;n++){
                     Event event=new Event();
                     switch (n%5){
-                        case 0:  event=new Event("起床",data,6,30,7,00);
+                        case 0:  event=new Event("起床",data,6,30);
                             break;
-                        case 1:  event=new Event("早饭",data,7,00,7,30);
+                        case 1:  event=new Event("早饭",data,7,00);
                             break;
-                        case 2:  event=new Event("上午课",data,8,00,9,30);
+                        case 2:  event=new Event("上午课",data,8,00);
                             break;
-                        case 3:  event=new Event("下午课",data,13,30,14,30);
+                        case 3:  event=new Event("下午课",data,13,30);
                             break;
-                        case 4:  event=new Event("睡觉",data,22,00,24,00);
+                        case 4:  event=new Event("睡觉",data,22,00);
                             break;
                         default:break;
                     }
