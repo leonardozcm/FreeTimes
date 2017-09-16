@@ -66,6 +66,12 @@ public Dayseventadapter(List<Event> EventList){
             @Override
             public void onClick(View v) {
                 //dialog();
+                final int position=holder.getAdapterPosition()-1;
+                final Event origin_event=eventsList.get(position);
+                final String origin_thing=origin_event.getThing();
+                final int day=origin_event.getDay();
+                final int origin_hour=origin_event.getHappen_hour();
+                final int origin_minutes=origin_event.getHappen_minus();
                 final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
                 LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
                 final View dialogview=layoutInflater.inflate(R.layout.scrollview,(ViewGroup)v.findViewById(R.id.dialogview));
@@ -88,6 +94,13 @@ public Dayseventadapter(List<Event> EventList){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //添加储存数据逻辑
+                        eventsList.get(position).setHappen_hour(hour);
+                        eventsList.get(position).setHappen_minus(minutes);
+                        notifyItemChanged(position+1);
+                     Event event=new Event();
+                        event.setHappen_minus(hour);event.setHappen_minus(minutes);
+                        event.updateAll("thing = ? and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
+
                     }
                 });
                 builder.setNegativeButton("取消",null);
