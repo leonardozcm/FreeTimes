@@ -1,15 +1,20 @@
 package com.example.com.freetimes;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -21,7 +26,8 @@ public class Dayseventadapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static final int TYPE_NORMAL=1;
     private View mHeaderView;//不妥的做法，但是暂时没有好的实现方法
     private List<Event> eventsList=new ArrayList<>();
-
+    private int hour;
+    private int minutes;
 
     public View getHeaderView(){
         return mHeaderView;
@@ -37,8 +43,7 @@ public Dayseventadapter(List<Event> EventList){
   class ViewHolder extends RecyclerView.ViewHolder{
         TextView events_name;
         TextView start_time;
-        TextView end_time;
-      LinearLayout layout;
+        LinearLayout layout;
         public ViewHolder(View view){
             super(view);
             if(view==mHeaderView){
@@ -55,8 +60,42 @@ public Dayseventadapter(List<Event> EventList){
         if(mHeaderView!=null&&viewType==TYPE_HEADER){
             return new ViewHolder(mHeaderView);
         }
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.days_event_item,parent,false);
-        ViewHolder holder=new ViewHolder(view);
+        final View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.days_event_item,parent,false);
+        final ViewHolder holder=new ViewHolder(view);
+        holder.start_time.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                final View view=v;
+                //dialog();
+                final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
+                final View dialogview=layoutInflater.inflate(R.layout.scrollview,(ViewGroup)v.findViewById(R.id.dialogview));
+                builder.setView(dialogview);
+                TimePicker timePicker=(TimePicker)dialogview.findViewById(R.id.timepicker);
+                timePicker.setIs24HourView(true);
+                Calendar c=Calendar.getInstance();
+                timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+                hour = c.get(Calendar.HOUR);
+                minutes = c.get(Calendar.MINUTE);
+   timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+       @Override
+       public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+           hour=hourOfDay;
+           minutes=minute;
+
+       }
+   });
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //添加储存数据逻辑
+                    }
+                });
+                builder.setNegativeButton("取消",null);
+                builder.show();
+            }
+
+        });
         return holder;
     }
 
@@ -66,7 +105,7 @@ public Dayseventadapter(List<Event> EventList){
             if(viewholder instanceof ViewHolder){
                 Event event=eventsList.get(position-1);
                 ((ViewHolder)viewholder).events_name.setText(event.getThing());
-                ((ViewHolder)viewholder).start_time.setText("Starts at:"+event.getHappen_hour()+":"+event.getHappen_minus());
+                ((ViewHolder)viewholder).start_time.setText(event.getHappen_hour()+":"+event.getHappen_minus());
                 switch ((int)(Math.random()*5)){
                     case 0: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue1);break;
                     case 1: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue2);break;
@@ -115,5 +154,4 @@ public Dayseventadapter(List<Event> EventList){
         notifyItemRemoved(position);
 
     }
-
 }

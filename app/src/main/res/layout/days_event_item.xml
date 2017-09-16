@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:textSize="30sp"
-            android:maxLines="1"
             android:id="@+id/start_time"/>
 </LinearLayout>
 </LinearLayout>

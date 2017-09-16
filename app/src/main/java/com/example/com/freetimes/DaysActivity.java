@@ -22,7 +22,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaysActivity extends BaseActivity implements View.OnClickListener{
+public class DaysActivity extends BaseActivity {
 private DrawerLayout mDrawerLayout;
     private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;

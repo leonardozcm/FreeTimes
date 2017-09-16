@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/dialogview"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
         android:layout_width="match_parent"
@@ -9,29 +11,12 @@
         android:textColor="#aa00aeef"
         android:textSize="20sp"
         android:text="请选择时间"/>
-    <LinearLayout
-        android:id="@+id/scroll_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <com.example.flt.myapplication.PickerView
-            android:id="@+id/hour_picker"
-            android:layout_width="100dp"
-            android:layout_height="100dp"></com.example.flt.myapplication.PickerView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="时"
-            android:layout_gravity="center_vertical"/>
-        <com.example.flt.myapplication.PickerView
-            android:id="@+id/minus_picker"
-            android:layout_width="100dp"
-            android:layout_height="100dp"></com.example.flt.myapplication.PickerView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+<TimePicker
+    android:id="@+id/timepicker"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:timePickerMode="clock"></TimePicker>
+
+
 </LinearLayout>
