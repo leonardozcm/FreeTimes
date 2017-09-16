@@ -1,9 +1,11 @@
 package com.example.com.freetimes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 import com.example.com.freetimes.Util.NewItemDecoration;
@@ -20,6 +25,7 @@ import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DaysActivity extends BaseActivity {
@@ -27,6 +33,8 @@ private DrawerLayout mDrawerLayout;
     private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
     private int data;
+    int hour;
+    int minutes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,17 +88,38 @@ private DrawerLayout mDrawerLayout;
         switch (item.getItemId()){
             case R.id.delete_all:
                 DataSupport.deleteAll(Event.class,"day=? ",Integer.toString(data));
-                dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
+                        for(int n=0;n<eventsList.size();n++) {
+                            dayseventadapter.notifyItemRemoved(1);
+                        }
+
+                //dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
                 eventsList.clear();
                 break;
             case R.id.add:
-               /* dayseventadapter.notifyItemRemoved(3);
-                int hours=eventsList.get(2).getHappen_hour();
-                int minus=eventsList.get(2).getHappen_minus();
-                DataSupport.deleteAll(Event.class,"day=? and happen_hour=? and happen_minus=?",Integer.toString(data),Integer.toString(hours),Integer.toString(minus));
-                eventsList.remove(2);
-                dayseventadapter.notifyItemRangeRemoved();
-                Toast.makeText(DaysActivity.this,"Delete succeed",Toast.LENGTH_SHORT).show();*/
+                   final AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                LayoutInflater layoutInflater=LayoutInflater.from(this);
+                final View dialogview=layoutInflater.inflate(R.layout.addeventview,(ViewGroup)findViewById(R.id.addeventview));
+                builder.setView(dialogview);
+                TimePicker timePicker=(TimePicker)dialogview.findViewById(R.id.addeventview_timepicker);
+                timePicker.setIs24HourView(true);
+                Calendar c=Calendar.getInstance();
+                timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+                timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                        hour=hourOfDay;
+                        minutes=minute;
+
+                    }
+                });
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //添加储存数据逻辑
+                    }
+                });
+                builder.setNegativeButton("取消",null);
+                builder.show();
                 break;
             case R.id.choose:/*Test：添加数据库*/
                 for(int n=0;n<5;n++){

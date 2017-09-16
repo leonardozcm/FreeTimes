@@ -65,7 +65,6 @@ public Dayseventadapter(List<Event> EventList){
         holder.start_time.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                final View view=v;
                 //dialog();
                 final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
                 LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
@@ -105,7 +104,7 @@ public Dayseventadapter(List<Event> EventList){
             if(viewholder instanceof ViewHolder){
                 Event event=eventsList.get(position-1);
                 ((ViewHolder)viewholder).events_name.setText(event.getThing());
-                ((ViewHolder)viewholder).start_time.setText(event.getHappen_hour()+":"+event.getHappen_minus());
+                ((ViewHolder)viewholder).start_time.setText(String.format("%02d",event.getHappen_hour())+":"+String.format("%02d",event.getHappen_minus()));
                 switch ((int)(Math.random()*5)){
                     case 0: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue1);break;
                     case 1: ((ViewHolder)viewholder).layout.setBackgroundResource(R.drawable.blue2);break;
@@ -145,13 +144,18 @@ public Dayseventadapter(List<Event> EventList){
 用于滑动的方法
  */
     public void onItemDismiss(int position){
-        int day=eventsList.get(position-1).getDay();
-        int hours=eventsList.get(position-1).getHappen_hour();
-        int minus=eventsList.get(position-1).getHappen_minus();
-        String thing=eventsList.get(position-1).getThing();
-        DataSupport.deleteAll(Event.class,"day=? and thing=? and happen_hour=? and happen_minus=?",Integer.toString(day),thing,Integer.toString(hours),Integer.toString(minus));
-       eventsList.remove(position-1);
-        notifyItemRemoved(position);
+        if(position==0){
+
+        }else {
+            int day=eventsList.get(position-1).getDay();
+            int hours=eventsList.get(position-1).getHappen_hour();
+            int minus=eventsList.get(position-1).getHappen_minus();
+            String thing=eventsList.get(position-1).getThing();
+            DataSupport.deleteAll(Event.class,"day=? and thing=? and happen_hour=? and happen_minus=?",Integer.toString(day),thing,Integer.toString(hours),Integer.toString(minus));
+            eventsList.remove(position-1);
+            notifyItemRemoved(position);
+        }
 
     }
+
 }
