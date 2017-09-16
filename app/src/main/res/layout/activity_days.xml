@@ -23,11 +23,22 @@
         android:id="@+id/event_recyclerview"
     />
 </LinearLayout>
-    <TextView
+    <LinearLayout
+        android:layout_width="200sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="#FFF">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="45dp"
+            android:textColor="#e9cf0b"
+            android:text="快速添加"/>
+<android.support.v7.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:text="Button Menu"
-    android:background="#FFF"/>
-
+    android:id="@+id/fast_add_event">
+</android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

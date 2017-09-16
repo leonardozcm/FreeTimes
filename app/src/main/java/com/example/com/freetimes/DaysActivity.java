@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
@@ -30,11 +31,13 @@ import java.util.List;
 
 public class DaysActivity extends BaseActivity {
 private DrawerLayout mDrawerLayout;
+    private RecyclerView fast_add_event;
     private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
     private int data;
     int hour;
     int minutes;
+    private String[] stringList={"起床","约会","充热水卡","抄实验报告","自习","洗衣服","打天梯","换被套","ADD MORE..."};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,17 @@ private DrawerLayout mDrawerLayout;
         ItemTouchHelper.Callback callback=new DayItemTouchHelperCallback(dayseventadapter);
         ItemTouchHelper touchHelper=new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
+
+        /*
+        DrawerLayout中的选择视图
+         */
+        mDrawerLayout=(android.support.v4.widget.DrawerLayout)findViewById(R.id.days_drawer_layout);
+        fast_add_event=(RecyclerView)findViewById(R.id.fast_add_event);
+        LinearLayoutManager linearLayoutManager1=new LinearLayoutManager(this);
+        fast_add_event.setLayoutManager(linearLayoutManager1);
+        fast_add_event.addItemDecoration(new NewItemDecoration());
+        fast_add_event.setAdapter(new Fastaddadapter(stringList));
+
     }
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.days_toolbar,menu);
@@ -103,19 +117,26 @@ private DrawerLayout mDrawerLayout;
                 TimePicker timePicker=(TimePicker)dialogview.findViewById(R.id.addeventview_timepicker);
                 timePicker.setIs24HourView(true);
                 Calendar c=Calendar.getInstance();
+                hour=c.get(Calendar.HOUR_OF_DAY);
+                minutes=c.get(Calendar.MINUTE);
                 timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
                 timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
                     @Override
                     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                         hour=hourOfDay;
                         minutes=minute;
-
                     }
                 });
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //添加储存数据逻辑
+                        EditText editText=(EditText)dialogview.findViewById(R.id.add_event);
+                        String str=editText.getText().toString();
+                        Event event=new Event(str,data,hour,minutes);
+                        eventsList.add(event);
+                        dayseventadapter.notifyItemInserted(eventsList.size()+1);
+                        event.save();
                     }
                 });
                 builder.setNegativeButton("取消",null);
@@ -151,7 +172,6 @@ private DrawerLayout mDrawerLayout;
     private void initEvents(){
         eventsList= DataSupport.where("day=?",Integer.toString(data)).find(Event.class);
     }
-
     /*
     设置headview
      */
@@ -159,5 +179,4 @@ private DrawerLayout mDrawerLayout;
         View header = LayoutInflater.from(this).inflate(R.layout.days_header, view, false);
        dayseventadapter .setHeaderView(header);
     }
-
 }
