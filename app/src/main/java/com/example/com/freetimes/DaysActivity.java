@@ -163,9 +163,11 @@ private DrawerLayout mDrawerLayout;
                             break;
                         default:break;
                     }
+                    eventsList.add(event);
                     event.save();
+                    dayseventadapter.notifyItemInserted(n+1);
                 }
-                Toast.makeText(DaysActivity.this,"Creat succeed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(DaysActivity.this,"ADD SUCCEED",Toast.LENGTH_SHORT).show();
                 break;
             case android.R.id.home:
                 DaysActivity.this.finish();break;
@@ -175,7 +177,8 @@ private DrawerLayout mDrawerLayout;
     }
 
     private void initEvents(){
-        eventsList= DataSupport.where("day=?",Integer.toString(data)).find(Event.class);
+        eventsList= DataSupport.where("day=?",Integer.toString(data)).order("happen_hour,happen_minus").find(Event.class);
+       // eventsList= DataSupport.where("day=?",Integer.toString(data)).find(Event.class);
     }
     /*
     设置headview

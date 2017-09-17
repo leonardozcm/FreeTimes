@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.example.com.freetimes.Util.NewItemDecoration;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +74,9 @@ public class TabLayoutFragment2 extends Fragment {
     初始化事件
      */
     private void initEvents(){
-        for(int n=0;n<30;n++){
+
+eventsList= DataSupport.findAll(Event.class);
+       /* for(int n=0;n<30;n++){
             int day=0;
             switch (n%5) {
                 case 0:
@@ -98,6 +102,6 @@ public class TabLayoutFragment2 extends Fragment {
                 default:
                     break;
             }
-        }
+        }*/
     }
 }

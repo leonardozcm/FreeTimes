@@ -11,7 +11,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/choose"
-        android:title="测试用"
+        android:title="批量添加"
         app:showAsAction="always" />
 
 
