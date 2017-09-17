@@ -11,14 +11,20 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by 59771 on 2017/9/16.
  */
 
 public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHolder> {
-    private String[] addeventlist;
+   // private String[] addeventlist;
+   private List<String> addeventlist=new ArrayList<>();
+    private  List<Event> eventsList=new ArrayList<>();
+    private Dayseventadapter dayseventadapter;
+    private int day;
     int hour;
     int minutes;
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -30,21 +36,50 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
         }
     }
 
-    public Fastaddadapter(String[] maddeventlist){
+    public Fastaddadapter(List<String> maddeventlist,List<Event> EventList,int Day,Dayseventadapter mdayseventadapter){
         addeventlist=maddeventlist;
+        eventsList=EventList;
+        day=Day;
+       dayseventadapter=mdayseventadapter;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.fast_add_eventitem,parent,false);
        final ViewHolder holder=new ViewHolder(view);
+        holder.textView.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+              //  Log.d("DaysActivity", "onLongClick: is OK");
+                final int position=holder.getAdapterPosition();
+                final String str=addeventlist.get(position);
+                final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
+                final View dialogview=layoutInflater.inflate(R.layout.addfast_delete,(ViewGroup)v.findViewById(R.id.addfast_delete));
+                TextView textView=(TextView)dialogview.findViewById(R.id.delete_hint) ;
+                textView.setText("你确定要删除 "+str+" 添加按钮？");
+                builder.setView(dialogview);
+                builder.setPositiveButton("确定删除",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(position!=addeventlist.size()-1){
+                            DaysActivity.stringList.remove(position);
+                            notifyItemRemoved(position);
+                        }
+                    }
+                });
+                builder.setNegativeButton("取消",null);
+                builder.show();
+                return true;
+            }
+        });
         holder.textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 int position=holder.getAdapterPosition();
-                String str=null;
-                if(position!=addeventlist.length-1){
-                    str=addeventlist[position];
+               //String str=null;
+                if(position!=addeventlist.size()-1){
+                    final String str=addeventlist.get(position);
                     final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
                     LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
                     final View dialogview=layoutInflater.inflate(R.layout.addeventview,(ViewGroup)v.findViewById(R.id.addeventview));
@@ -67,12 +102,31 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //TODO 数据储存逻辑
+                          Event event=new Event(str,day,hour,minutes);
+                            eventsList.add(event);
+                           dayseventadapter.notifyItemInserted(eventsList.size()+1);
+                            event.save();
                         }
                     });
                     builder.setNegativeButton("取消",null);
                     builder.show();
                 }else{
                     //TODO 新建建议活动逻辑
+                    final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                    LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
+                    final View dialogview=layoutInflater.inflate(R.layout.add_newevent,(ViewGroup)v.findViewById(R.id.add_newevent));
+                    final EditText editText=(EditText)dialogview.findViewById(R.id.addnewevent_EditText);
+                    builder.setView(dialogview);
+                    builder.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String str=editText.getText().toString();
+                                 DaysActivity.setFast_add_event(str);
+                            notifyItemInserted(DaysActivity.stringList.size()-2);
+                        }
+                    });
+                    builder.setNegativeButton("取消",null);
+                    builder.show();
                 }
 
 
@@ -83,12 +137,12 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String str=addeventlist[position];
+        String str=addeventlist.get(position);
         holder.textView.setText(str);
     }
 
     @Override
     public int getItemCount() {
-        return addeventlist.length;
+        return addeventlist.size();
     }
 }
