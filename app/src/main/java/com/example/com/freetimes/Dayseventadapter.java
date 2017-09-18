@@ -69,6 +69,7 @@ public Dayseventadapter(List<Event> EventList){
                 final int position=holder.getAdapterPosition()-1;
                 final Event origin_event=eventsList.get(position);
                 final String origin_thing=origin_event.getThing();
+                final int month=origin_event.getMonth();
                 final int day=origin_event.getDay();
                 final int origin_hour=origin_event.getHappen_hour();
                 final int origin_minutes=origin_event.getHappen_minus();
@@ -79,7 +80,8 @@ public Dayseventadapter(List<Event> EventList){
                 TimePicker timePicker=(TimePicker)dialogview.findViewById(R.id.timepicker);
                 timePicker.setIs24HourView(true);
                 Calendar c=Calendar.getInstance();
-                timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+                timePicker.setCurrentHour(origin_hour);
+                timePicker.setCurrentMinute(origin_minutes);
                 hour = c.get(Calendar.HOUR);
                 minutes = c.get(Calendar.MINUTE);
    timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
@@ -99,7 +101,7 @@ public Dayseventadapter(List<Event> EventList){
                         notifyItemChanged(position+1);
                      Event event=new Event();
                         event.setHappen_minus(hour);event.setHappen_minus(minutes);
-                        event.updateAll("thing = ? and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
+                        event.updateAll("thing = ? and month = ?and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(month),Integer.toString(day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
 
                     }
                 });
@@ -160,11 +162,12 @@ public Dayseventadapter(List<Event> EventList){
         if(position==0){
 
         }else {
+            int month=eventsList.get(position-1).getMonth();
             int day=eventsList.get(position-1).getDay();
             int hours=eventsList.get(position-1).getHappen_hour();
             int minus=eventsList.get(position-1).getHappen_minus();
             String thing=eventsList.get(position-1).getThing();
-            DataSupport.deleteAll(Event.class,"day=? and thing=? and happen_hour=? and happen_minus=?",Integer.toString(day),thing,Integer.toString(hours),Integer.toString(minus));
+            DataSupport.deleteAll(Event.class,"month=? and day=? and thing=? and happen_hour=? and happen_minus=?",Integer.toString(month),Integer.toString(day),thing,Integer.toString(hours),Integer.toString(minus));
             eventsList.remove(position-1);
             notifyItemRemoved(position);
         }

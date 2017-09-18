@@ -5,23 +5,36 @@ package com.example.com.freetimes;
  */
 
 public class Day {
+
+
+    private int month;
+
     private int date;
 
     private int imageId;
 
    // public List<Event> events=new ArrayList<Event>();
 
-    public Day(int date,int imageId){
+    public Day(int month,int date,int imageId){
+        this.month=month;
         this.date=date;
         this.imageId=imageId;
     }
 
-    public String getDate(){
-        return "9月"+date+"日";
+    public String getDay(){
+        return month+"月"+date+"日";
     }
 
     public int getImageId(){
         return imageId;
+    }
+
+    public int getDate() {
+        return date;
+    }
+
+    public int getMonth() {
+        return month;
     }
 
   /*  public void addEvent(Event event){

@@ -35,7 +35,9 @@ private DrawerLayout mDrawerLayout;
     private RecyclerView fast_add_event;
     private List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
-    private int data;
+    private int date;
+    private int month;
+
     int hour;
     int minutes;
     static public List<String> stringList=new ArrayList<>();
@@ -60,9 +62,10 @@ private DrawerLayout mDrawerLayout;
 设置标题
  */
         Intent intent=getIntent();
-        data=intent.getIntExtra("date",1)+1;
+        date=intent.getIntExtra("date",1);
+        month=intent.getIntExtra("month",1);
         if(actionBar!=null) {
-            actionBar.setTitle("9月" + data + "日");
+            actionBar.setTitle(month+"月" + date+ "日");
         }
         /*
         加载事件视图
@@ -87,14 +90,14 @@ private DrawerLayout mDrawerLayout;
         DrawerLayout中的选择视图
          */
         if(update_times==0){
-            initfastadd();;update_times++;
+            initfastadd();update_times++;
         }
         mDrawerLayout=(android.support.v4.widget.DrawerLayout)findViewById(R.id.days_drawer_layout);
         fast_add_event=(RecyclerView)findViewById(R.id.fast_add_event);
         LinearLayoutManager linearLayoutManager1=new LinearLayoutManager(this);
         fast_add_event.setLayoutManager(linearLayoutManager1);
         fast_add_event.addItemDecoration(new NewItemDecoration());
-        fast_add_event.setAdapter(new Fastaddadapter(stringList,eventsList,data,dayseventadapter));
+        fast_add_event.setAdapter(new Fastaddadapter(stringList,eventsList,month,date,dayseventadapter));
 
     }
     public boolean onCreateOptionsMenu(Menu menu){
@@ -106,7 +109,7 @@ private DrawerLayout mDrawerLayout;
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.delete_all:
-                DataSupport.deleteAll(Event.class,"day=? ",Integer.toString(data));
+                DataSupport.deleteAll(Event.class,"month=? and day=? ",Integer.toString(month),Integer.toString(date));
                         for(int n=0;n<eventsList.size();n++) {
                             dayseventadapter.notifyItemRemoved(1);
                         }
@@ -138,7 +141,7 @@ private DrawerLayout mDrawerLayout;
                         //添加储存数据逻辑
                         EditText editText=(EditText)dialogview.findViewById(R.id.add_event);
                         String str=editText.getText().toString();
-                        Event event=new Event(str,data,hour,minutes);
+                        Event event=new Event(str,month,date,hour,minutes);
                         eventsList.add(event);
                         dayseventadapter.notifyItemInserted(eventsList.size()+1);
                         event.save();
@@ -151,15 +154,15 @@ private DrawerLayout mDrawerLayout;
                 for(int n=0;n<5;n++){
                     Event event=new Event();
                     switch (n%5){
-                        case 0:  event=new Event("起床",data,6,30);
+                        case 0:  event=new Event("起床",month,date,6,30);
                             break;
-                        case 1:  event=new Event("早饭",data,7,00);
+                        case 1:  event=new Event("早饭",month,date,7,00);
                             break;
-                        case 2:  event=new Event("上午课",data,8,00);
+                        case 2:  event=new Event("上午课",month,date,8,00);
                             break;
-                        case 3:  event=new Event("下午课",data,13,30);
+                        case 3:  event=new Event("下午课",month,date,13,30);
                             break;
-                        case 4:  event=new Event("睡觉",data,22,00);
+                        case 4:  event=new Event("睡觉",month,date,22,00);
                             break;
                         default:break;
                     }
@@ -177,7 +180,7 @@ private DrawerLayout mDrawerLayout;
     }
 
     private void initEvents(){
-        eventsList= DataSupport.where("day=?",Integer.toString(data)).order("happen_hour,happen_minus").find(Event.class);
+        eventsList= DataSupport.where("month=? and day=?",Integer.toString(month),Integer.toString(date)).order("happen_hour,happen_minus").find(Event.class);
        // eventsList= DataSupport.where("day=?",Integer.toString(data)).find(Event.class);
     }
     /*

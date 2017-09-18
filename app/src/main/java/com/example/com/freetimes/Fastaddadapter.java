@@ -25,6 +25,7 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
     private  List<Event> eventsList=new ArrayList<>();
     private Dayseventadapter dayseventadapter;
     private int day;
+    private int month;
     int hour;
     int minutes;
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -36,9 +37,10 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
         }
     }
 
-    public Fastaddadapter(List<String> maddeventlist,List<Event> EventList,int Day,Dayseventadapter mdayseventadapter){
+    public Fastaddadapter(List<String> maddeventlist,List<Event> EventList,int Month,int Day,Dayseventadapter mdayseventadapter){
         addeventlist=maddeventlist;
         eventsList=EventList;
+        month=Month;
         day=Day;
        dayseventadapter=mdayseventadapter;
     }
@@ -102,7 +104,7 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //TODO 数据储存逻辑
-                          Event event=new Event(str,day,hour,minutes);
+                          Event event=new Event(str,month,day,hour,minutes);
                             eventsList.add(event);
                            dayseventadapter.notifyItemInserted(eventsList.size()+1);
                             event.save();

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.com.freetimes.Util.DateAutoMaker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,15 +81,15 @@ private void initView(){
     private void initDays(){
         for(int n=0;n<30;n++){
             switch (n%5){
-                case 0: Day day0=new Day(n+1,R.drawable.background_1);
+                case 0: Day day0=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_1);
                     daysList.add(day0);break;
-                case 1: Day day1=new Day(n+1,R.drawable.background_2);
+                case 1: Day day1=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_2);
                     daysList.add(day1);break;
-                case 2: Day day2=new Day(n+1,R.drawable.background_3);
+                case 2: Day day2=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_3);
                     daysList.add(day2);break;
-                case 3: Day day3=new Day(n+1,R.drawable.background_4);
+                case 3: Day day3=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_4);
                     daysList.add(day3);break;
-                case 4: Day day4=new Day(n+1,R.drawable.background_5);
+                case 4: Day day4=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_5);
                     daysList.add(day4);break;
                 default:break;
             }

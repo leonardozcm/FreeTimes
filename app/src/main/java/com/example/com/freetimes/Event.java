@@ -8,8 +8,8 @@ import org.litepal.crud.DataSupport;
 
 public class Event extends DataSupport{
 
-
     private String thing;//事件内容
+    private int month;//月份
     private int day;//事件日期
 
     //开始时间
@@ -21,14 +21,9 @@ public class Event extends DataSupport{
   */
  public Event(){}
 
-    public Event(String thing,int day,int happen_hour){
+    public Event(String thing,int month,int day,int happen_hour,int happen_minus){
         this.thing=thing;
-        this.day=day;
-        this.happen_hour=happen_hour;
-    }
-
-    public Event(String thing,int day,int happen_hour,int happen_minus){
-        this.thing=thing;
+        this.month=month;
         this.day=day;
         this.happen_hour=happen_hour;
         this.happen_minus=happen_minus;
@@ -46,6 +41,10 @@ public class Event extends DataSupport{
         this.thing = thing;
     }
     public void setDay(int day) {this.day = day;}
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
     /*
 读取数据
  */
@@ -63,5 +62,8 @@ public class Event extends DataSupport{
         return happen_minus;
     }
 
+    public int getMonth() {
+        return month;
+    }
 
 }
