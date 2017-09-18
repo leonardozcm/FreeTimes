@@ -3,6 +3,7 @@ package com.example.com.freetimes;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +70,8 @@ public Dayseventadapter(List<Event> EventList){
                 final int position=holder.getAdapterPosition()-1;
                 final Event origin_event=eventsList.get(position);
                 final String origin_thing=origin_event.getThing();
-                final int month=origin_event.getMonth();
-                final int day=origin_event.getDay();
+                final int origin_month=origin_event.getMonth();
+                final int origin_day=origin_event.getDay();
                 final int origin_hour=origin_event.getHappen_hour();
                 final int origin_minutes=origin_event.getHappen_minus();
                 final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
@@ -100,9 +101,9 @@ public Dayseventadapter(List<Event> EventList){
                         eventsList.get(position).setHappen_minus(minutes);
                         notifyItemChanged(position+1);
                      Event event=new Event();
-                        event.setHappen_minus(hour);event.setHappen_minus(minutes);
-                        event.updateAll("thing = ? and month = ?and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(month),Integer.toString(day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
-
+                        event.setHappen_hour(hour);event.setHappen_minus(minutes);
+                        event.updateAll("thing = ? and month = ?and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(origin_month),Integer.toString(origin_day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
+                        Log.d("DaysActivity", Integer.toString(event.getHappen_hour()));
                     }
                 });
                 builder.setNegativeButton("取消",null);

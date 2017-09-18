@@ -92,7 +92,7 @@ private DrawerLayout mDrawerLayout;
         if(update_times==0){
             initfastadd();update_times++;
         }
-        mDrawerLayout=(android.support.v4.widget.DrawerLayout)findViewById(R.id.days_drawer_layout);
+        //mDrawerLayout=(android.support.v4.widget.DrawerLayout)findViewById(R.id.days_drawer_layout);
         fast_add_event=(RecyclerView)findViewById(R.id.fast_add_event);
         LinearLayoutManager linearLayoutManager1=new LinearLayoutManager(this);
         fast_add_event.setLayoutManager(linearLayoutManager1);
@@ -145,6 +145,8 @@ private DrawerLayout mDrawerLayout;
                         eventsList.add(event);
                         dayseventadapter.notifyItemInserted(eventsList.size()+1);
                         event.save();
+                        Intent intent = new Intent(DaysActivity.this, LongRunningService.class);
+                        startService(intent);
                     }
                 });
                 builder.setNegativeButton("取消",null);
@@ -171,6 +173,7 @@ private DrawerLayout mDrawerLayout;
                     dayseventadapter.notifyItemInserted(n+1);
                 }
                 Toast.makeText(DaysActivity.this,"ADD SUCCEED",Toast.LENGTH_SHORT).show();
+
                 break;
             case android.R.id.home:
                 DaysActivity.this.finish();break;

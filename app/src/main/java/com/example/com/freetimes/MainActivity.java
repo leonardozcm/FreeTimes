@@ -7,10 +7,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +32,9 @@ private DrawerLayout mDrawerLayout;
     private String[] Tablist=new String[]{"DATE","EVENT"};
     private List<Fragment>fragmentList;
     private ViewPagerAdapter viewPagerAdapter;
+    private List<Event> searchlist=new ArrayList<>();
+    private String searchfor;
+    private searchAdapter msearchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,39 @@ private DrawerLayout mDrawerLayout;
          */
         initView();
         initData();
+
+        /*
+        加载搜索框视图
+         */
+        final RecyclerView recyclerView=(RecyclerView)findViewById(R.id.search_result);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        final EditText editText=(EditText)findViewById(R.id.search_msg);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchfor=editText.getText().toString();
+                if(searchfor.length()!=0){
+                    searchlist= DataSupport.where("thing like ?","%"+searchfor+"%").find(Event.class);
+                    msearchAdapter=new searchAdapter(searchlist);
+                    recyclerView.setAdapter(msearchAdapter);
+                    msearchAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        /*
+        启动service
+         */
+        /*Intent intent = new Intent(this, LongRunningService.class);
+        startService(intent);*/
     }
 
     private void initView(){
@@ -98,6 +141,7 @@ private DrawerLayout mDrawerLayout;
             case R.id.settings:
                 Toast.makeText(this,"settings",Toast.LENGTH_SHORT).show();break;
             case R.id.delete:
+                DataSupport.deleteAll(Event.class);
                 Toast.makeText(this,"delete",Toast.LENGTH_SHORT).show();break;
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);

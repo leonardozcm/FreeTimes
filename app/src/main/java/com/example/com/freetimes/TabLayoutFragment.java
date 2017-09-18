@@ -76,10 +76,9 @@ private void initView(){
     recyclerView.setLayoutManager(layoutManager);
     daysAdapter=new DaysAdapter(daysList);
     recyclerView.setAdapter(daysAdapter);
-
 }
     private void initDays(){
-        for(int n=0;n<30;n++){
+        for(int n=0;n<31;n++){
             switch (n%5){
                 case 0: Day day0=new Day(DateAutoMaker.getMOUTH(n),DateAutoMaker.getDATE(n),R.drawable.background_1);
                     daysList.add(day0);break;

@@ -9,7 +9,6 @@ import java.util.Calendar;
 
 public class DateAutoMaker {
 
-
     public static int getDATE(int n){
         Calendar calendar=Calendar.getInstance();
         calendar.set(Calendar.DATE,calendar.get(Calendar.DATE)+n);
