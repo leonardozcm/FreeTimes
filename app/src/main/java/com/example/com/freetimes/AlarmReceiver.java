@@ -13,8 +13,10 @@ public class AlarmReceiver extends BroadcastReceiver  {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         String thing=intent.getStringExtra("thing");
-        int size=intent.getIntExtra("event_size",0);
+        int flag=intent.getIntExtra("flag",1);
+        Log.d("Alarm:", thing);
 
         NotificationManager manager=(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pIntent = PendingIntent.getActivity(context,1,intent,0);
@@ -28,12 +30,14 @@ public class AlarmReceiver extends BroadcastReceiver  {
         Log.d("DaysActivity", "notification ");
         notification.defaults = Notification.DEFAULT_ALL;
         manager.notify(1,notification);
-if(size!=1){
-    Intent i = new Intent(context, LongRunningService.class);
-    context.startService(i);
-}else {
-    //TODO让服务不再读取
-}
+
+        Intent i = new Intent(context, LongRunningService.class);
+        if(flag!=0){
+            i.putExtra("isRepeat",true);
+        }else {
+            i.putExtra("isRepeat",false);
+        }
+        context.startService(i);
 
     }
 

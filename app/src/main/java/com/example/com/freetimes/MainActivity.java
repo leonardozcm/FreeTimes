@@ -92,7 +92,8 @@ private DrawerLayout mDrawerLayout;
         /*
         启动service
          */
-        /*Intent intent = new Intent(this, LongRunningService.class);
+       /* Intent intent = new Intent(MainActivity.this, LongRunningService.class);
+        intent.putExtra("isRepeat",true);
         startService(intent);*/
     }
 

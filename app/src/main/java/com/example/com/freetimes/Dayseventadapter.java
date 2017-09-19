@@ -1,9 +1,9 @@
 package com.example.com.freetimes;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +103,9 @@ public Dayseventadapter(List<Event> EventList){
                      Event event=new Event();
                         event.setHappen_hour(hour);event.setHappen_minus(minutes);
                         event.updateAll("thing = ? and month = ?and day =? and happen_hour = ? and happen_minus=?",origin_thing,Integer.toString(origin_month),Integer.toString(origin_day),Integer.toString(origin_hour),Integer.toString(origin_minutes));
-                        Log.d("DaysActivity", Integer.toString(event.getHappen_hour()));
+                        Intent intent = new Intent(view.getContext(),LongRunningService.class);
+                        intent.putExtra("isRepeat",true);
+                        view.getContext().startService(intent);
                     }
                 });
                 builder.setNegativeButton("取消",null);

@@ -1,6 +1,7 @@
 package com.example.com.freetimes;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -103,17 +104,18 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //TODO 数据储存逻辑
                           Event event=new Event(str,month,day,hour,minutes);
                             eventsList.add(event);
                            dayseventadapter.notifyItemInserted(eventsList.size()+1);
                             event.save();
+                            Intent intent = new Intent(dialogview.getContext(), LongRunningService.class);
+                            intent.putExtra("isRepeat",true);
+                            dialogview.getContext().startService(intent);
                         }
                     });
                     builder.setNegativeButton("取消",null);
                     builder.show();
                 }else{
-                    //TODO 新建建议活动逻辑
                     final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
                     LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
                     final View dialogview=layoutInflater.inflate(R.layout.add_newevent,(ViewGroup)v.findViewById(R.id.add_newevent));

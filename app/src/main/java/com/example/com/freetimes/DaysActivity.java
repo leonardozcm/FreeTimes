@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,11 +99,17 @@ private DrawerLayout mDrawerLayout;
         fast_add_event.setLayoutManager(linearLayoutManager1);
         fast_add_event.addItemDecoration(new NewItemDecoration());
         fast_add_event.setAdapter(new Fastaddadapter(stringList,eventsList,month,date,dayseventadapter));
-
+        /*
+        启动活动
+         */
+      /*  Intent intent2 = new Intent(DaysActivity.this, LongRunningService.class);
+        intent2.putExtra("isRepeat",true);
+        startService(intent2);*/
     }
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.days_toolbar,menu);
         return true;
+
     }
 
     @Override
@@ -113,7 +120,9 @@ private DrawerLayout mDrawerLayout;
                         for(int n=0;n<eventsList.size();n++) {
                             dayseventadapter.notifyItemRemoved(1);
                         }
-
+                Intent intent = new Intent(DaysActivity.this, LongRunningService.class);
+                intent.putExtra("isRepeat",true);
+                startService(intent);
                 //dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
                 eventsList.clear();
                 break;
@@ -145,26 +154,31 @@ private DrawerLayout mDrawerLayout;
                         eventsList.add(event);
                         dayseventadapter.notifyItemInserted(eventsList.size()+1);
                         event.save();
+                        List<Event> events=DataSupport.where("thing=? and day =?",str,Integer.toString(date)).find(Event.class);
+                        if(events.size()!=0){
+                            Log.d("sqlite", "is ok");}
                         Intent intent = new Intent(DaysActivity.this, LongRunningService.class);
+                        intent.putExtra("isRepeat",true);
                         startService(intent);
                     }
                 });
                 builder.setNegativeButton("取消",null);
                 builder.show();
+
                 break;
             case R.id.choose:/*Test：添加数据库*/
                 for(int n=0;n<5;n++){
                     Event event=new Event();
                     switch (n%5){
-                        case 0:  event=new Event("起床",month,date,6,30);
+                        case 0:  event=new Event("起床",month,date,6,0);
                             break;
-                        case 1:  event=new Event("早饭",month,date,7,00);
+                        case 1:  event=new Event("早饭",month,date,7,0);
                             break;
-                        case 2:  event=new Event("上午课",month,date,8,00);
+                        case 2:  event=new Event("上午课",month,date,9,15);
                             break;
-                        case 3:  event=new Event("下午课",month,date,13,30);
+                        case 3:  event=new Event("下午课",month,date,2,16);
                             break;
-                        case 4:  event=new Event("睡觉",month,date,22,00);
+                        case 4:  event=new Event("睡觉",month,date,22,10);
                             break;
                         default:break;
                     }
@@ -172,6 +186,9 @@ private DrawerLayout mDrawerLayout;
                     event.save();
                     dayseventadapter.notifyItemInserted(n+1);
                 }
+                Intent intent1 = new Intent(DaysActivity.this, LongRunningService.class);
+                intent1.putExtra("isRepeat",true);
+                startService(intent1);
                 Toast.makeText(DaysActivity.this,"ADD SUCCEED",Toast.LENGTH_SHORT).show();
 
                 break;
