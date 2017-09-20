@@ -55,24 +55,28 @@ public class Fastaddadapter extends RecyclerView.Adapter<Fastaddadapter.ViewHold
             public boolean onLongClick(View v) {
               //  Log.d("DaysActivity", "onLongClick: is OK");
                 final int position=holder.getAdapterPosition();
-                final String str=addeventlist.get(position);
-                final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
-                final View dialogview=layoutInflater.inflate(R.layout.addfast_delete,(ViewGroup)v.findViewById(R.id.addfast_delete));
-                TextView textView=(TextView)dialogview.findViewById(R.id.delete_hint) ;
-                textView.setText("你确定要删除 "+str+" 添加按钮？");
-                builder.setView(dialogview);
-                builder.setPositiveButton("确定删除",new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(position!=addeventlist.size()-1){
-                            DaysActivity.stringList.remove(position);
-                            notifyItemRemoved(position);
+
+                if(position!=addeventlist.size()-1){
+                    final String str=addeventlist.get(position);
+                    final AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                    LayoutInflater layoutInflater=LayoutInflater.from(v.getContext());
+                    final View dialogview=layoutInflater.inflate(R.layout.addfast_delete,(ViewGroup)v.findViewById(R.id.addfast_delete));
+                    TextView textView=(TextView)dialogview.findViewById(R.id.delete_hint) ;
+                    textView.setText("你确定要删除 "+str+" 添加按钮？");
+                    builder.setView(dialogview);
+                    builder.setPositiveButton("确定删除",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(position!=addeventlist.size()-1){
+                                DaysActivity.stringList.remove(position);
+                                notifyItemRemoved(position);
+                            }
                         }
-                    }
-                });
-                builder.setNegativeButton("取消",null);
-                builder.show();
+                    });
+                    builder.setNegativeButton("取消",null);
+                    builder.show();
+                }
+
                 return true;
             }
         });

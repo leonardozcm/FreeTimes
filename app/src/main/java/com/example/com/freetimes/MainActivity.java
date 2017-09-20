@@ -1,5 +1,7 @@
 package com.example.com.freetimes;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,14 +9,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
@@ -52,7 +59,7 @@ private DrawerLayout mDrawerLayout;
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            actionBar.setHomeAsUpIndicator(R.drawable.search_icon);
             actionBar.setHomeButtonEnabled(true);
         }
 
@@ -136,14 +143,28 @@ private DrawerLayout mDrawerLayout;
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.backup:
-             ;break;
-
             case R.id.settings:
-                Toast.makeText(this,"settings",Toast.LENGTH_SHORT).show();break;
+                Toast.makeText(this,"期待设置功能上线~",Toast.LENGTH_SHORT).show();break;
             case R.id.delete:
-                DataSupport.deleteAll(Event.class);
-                Toast.makeText(this,"delete",Toast.LENGTH_SHORT).show();break;
+                final AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                LayoutInflater layoutInflater=LayoutInflater.from(this);
+                final View dialogview=layoutInflater.inflate(R.layout.addfast_delete,(ViewGroup)this.findViewById(R.id.addfast_delete));
+                TextView textView=(TextView)dialogview.findViewById(R.id.delete_hint) ;
+                textView.setText("你确定要删除所有事项吗？\n删除后无法恢复");
+                builder.setView(dialogview);
+                builder.setPositiveButton("确定删除",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DataSupport.deleteAll(Event.class);
+                        Intent intent = new Intent(dialogview.getContext(), LongRunningService.class);
+                        intent.putExtra("isRepeat",true);
+                        startService(intent);
+                       Toast.makeText(dialogview.getContext(),"已删除所有事项",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("取消",null);
+                builder.show();
+               break;
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;

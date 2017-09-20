@@ -50,7 +50,7 @@ for(position=0;position<eventList.size();position++){
     selectTime=calendar.getTimeInMillis();
     if(selectTime>systemTime)break;
         }
-        if(!isRepeat||eventList.size()==0){
+        if(!isRepeat||position==eventList.size()){
 new Thread(new Runnable() {
     @Override
     public void run() {

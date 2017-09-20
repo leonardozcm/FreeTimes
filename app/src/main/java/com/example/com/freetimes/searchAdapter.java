@@ -1,6 +1,8 @@
 package com.example.com.freetimes;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * 搜索框的adapter
@@ -22,11 +26,13 @@ public class searchAdapter extends RecyclerView.Adapter<searchAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        View view;
         TextView search_day;
         TextView search_name;
 
-        public ViewHolder(View view){
-            super(view);
+        public ViewHolder(View v){
+            super(v);
+            view=v;
             search_day=(TextView)view.findViewById(R.id.search_day);
             search_name=(TextView)view.findViewById(R.id.search_name);
         }
@@ -35,7 +41,23 @@ public class searchAdapter extends RecyclerView.Adapter<searchAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item,parent,false);
-        return new ViewHolder(view);
+        final ViewHolder holder=new ViewHolder(view);
+        holder.view.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        int position=holder.getAdapterPosition();
+                        Log.d(TAG, Integer.toString(position));
+                        Event event=eventList.get(position);
+                        int month=event.getMonth();
+                        int day=event.getDay();
+                        Intent intent=new Intent(v.getContext(),DaysActivity.class);
+                        intent.putExtra("month",month);
+                        intent.putExtra("date",day);
+                        v.getContext().startActivity(intent);
+                    }
+                });
+        return holder;
     }
 
     @Override

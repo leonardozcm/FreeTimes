@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
@@ -116,15 +117,30 @@ private DrawerLayout mDrawerLayout;
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.delete_all:
-                DataSupport.deleteAll(Event.class,"month=? and day=? ",Integer.toString(month),Integer.toString(date));
+                final AlertDialog.Builder builder0=new AlertDialog.Builder(this);
+                LayoutInflater layoutInflater0=LayoutInflater.from(this);
+                final View dialogview0=layoutInflater0.inflate(R.layout.addfast_delete,(ViewGroup)this.findViewById(R.id.addfast_delete));
+                TextView textView=(TextView)dialogview0.findViewById(R.id.delete_hint) ;
+                textView.setText("你确定要删除"+month+"月"+date+"日的所有事项吗？\n删除后无法恢复");
+                builder0.setView(dialogview0);
+                builder0.setPositiveButton("确定删除",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DataSupport.deleteAll(Event.class,"month=? and day=? ",Integer.toString(month),Integer.toString(date));
                         for(int n=0;n<eventsList.size();n++) {
                             dayseventadapter.notifyItemRemoved(1);
                         }
-                Intent intent = new Intent(DaysActivity.this, LongRunningService.class);
-                intent.putExtra("isRepeat",true);
-                startService(intent);
-                //dayseventadapter.notifyItemRangeRemoved(1,eventsList.size());
-                eventsList.clear();
+                        eventsList.clear();
+                        Intent intent = new Intent(DaysActivity.this, LongRunningService.class);
+                        intent.putExtra("isRepeat",true);
+                        startService(intent);
+
+                        Toast.makeText(dialogview0.getContext(),"已删除所有事项",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder0.setNegativeButton("取消",null);
+                builder0.show();
+
                 break;
             case R.id.add:
                    final AlertDialog.Builder builder=new AlertDialog.Builder(this);
