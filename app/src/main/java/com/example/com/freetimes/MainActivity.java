@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +23,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
+
+import com.example.com.freetimes.Util.DateAutoMaker;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.example.com.freetimes.R.menu.toolbar;
@@ -43,6 +49,9 @@ private DrawerLayout mDrawerLayout;
     private String searchfor;
     private searchAdapter msearchAdapter;
 
+    private int hour;
+    private int minutes;
+    private List<Event> eventList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +111,8 @@ private DrawerLayout mDrawerLayout;
        /* Intent intent = new Intent(MainActivity.this, LongRunningService.class);
         intent.putExtra("isRepeat",true);
         startService(intent);*/
+
+
     }
 
     private void initView(){
@@ -167,6 +178,87 @@ private DrawerLayout mDrawerLayout;
                break;
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.add_everyevent:
+                //todo 添加每日事件逻辑
+                final AlertDialog.Builder addbuilder=new AlertDialog.Builder(this);
+                LayoutInflater add_layoutInflater=LayoutInflater.from(this);
+                final View add_dialogview=add_layoutInflater.inflate(R.layout.addeventview,(ViewGroup)findViewById(R.id.addeventview));
+
+                TextView textView1=(TextView)add_dialogview.findViewById(R.id.dialog_title);
+                textView1.setText("添加每日事件");
+
+                addbuilder.setView(add_dialogview);
+                TimePicker timePicker=(TimePicker)add_dialogview.findViewById(R.id.addeventview_timepicker);
+                timePicker.setIs24HourView(true);
+                Calendar c=Calendar.getInstance();
+                hour=c.get(Calendar.HOUR_OF_DAY);
+                minutes=c.get(Calendar.MINUTE);
+                timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+                timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                        hour=hourOfDay;
+                        minutes=minute;
+                    }
+                });
+                addbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //添加储存数据逻辑
+                        EditText editText=(EditText)add_dialogview.findViewById(R.id.add_event);
+
+
+                        String str=editText.getText().toString();
+                        Event event0=new Event(str,0,0,hour,minutes);
+                        event0.setIsEveryday(true);
+                        event0.save();
+
+                        //TODO 启用数据库
+                        for(int n=0;n<31;n++){
+                            Event event=new Event(str,0,0,hour,minutes);
+                            event.setIsEveryday(true);
+                            event.setDay(DateAutoMaker.getDATE(n));
+                            event.setMonth(DateAutoMaker.getMOUTH(n));
+                            event.save();
+                        }
+
+                        Intent intent = new Intent(MainActivity.this, LongRunningService.class);
+                        intent.putExtra("isRepeat",true);
+                        startService(intent);
+                    }
+                });
+                addbuilder.setNegativeButton("取消",null);
+               addbuilder.show();
+
+
+                break;
+            case R.id.manage_everyevent:
+                //todo 管理每日事件
+
+                final AlertDialog.Builder magbuilder=new AlertDialog.Builder(this);
+                LayoutInflater mag_layoutInflater=LayoutInflater.from(this);
+                final View mag_dialogview=mag_layoutInflater.inflate(R.layout.dialog_everydayevent,(ViewGroup)findViewById(R.id.dialog_everydayevent));
+
+                magbuilder.setView(mag_dialogview);
+
+                eventList=DataSupport.where("day = 0").find(Event.class);
+                Log.d("dialog", Integer.toString(eventList.size()));
+                RecyclerView recyclerView1=(RecyclerView)mag_dialogview.findViewById(R.id.list_everydayevent);
+                LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+                recyclerView1.setLayoutManager(linearLayoutManager);
+                Everydayeventadapter everydayeventadapter=new Everydayeventadapter(eventList);
+                recyclerView1.setAdapter(everydayeventadapter);
+
+                magbuilder.setPositiveButton("done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                magbuilder.show();
+
+
                 break;
             default:break;
         }

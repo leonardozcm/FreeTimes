@@ -12,6 +12,12 @@ public class Event extends DataSupport{
     private int month;//月份
     private int day;//事件日期
 
+
+
+
+
+    private boolean isEveryday=false;
+
     //开始时间
     private int happen_hour;
     private int happen_minus;
@@ -44,7 +50,9 @@ public class Event extends DataSupport{
     public void setMonth(int month) {
         this.month = month;
     }
-
+    public void setIsEveryday(boolean everyday) {
+        isEveryday = everyday;
+    }
     /*
 读取数据
  */
@@ -66,4 +74,7 @@ public class Event extends DataSupport{
         return month;
     }
 
+    public boolean getIsEveryday() {
+        return isEveryday;
+    }
 }

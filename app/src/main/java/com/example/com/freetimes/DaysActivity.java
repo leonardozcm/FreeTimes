@@ -165,6 +165,8 @@ private DrawerLayout mDrawerLayout;
                     public void onClick(DialogInterface dialog, int which) {
                         //添加储存数据逻辑
                         EditText editText=(EditText)dialogview.findViewById(R.id.add_event);
+
+
                         String str=editText.getText().toString();
                         Event event=new Event(str,month,date,hour,minutes);
                         eventsList.add(event);
